@@ -1,10 +1,17 @@
 "use client";
 
-import StarterKit from "@tiptap/starter-kit";
+import { Link } from "@tiptap/extension-link";
+import { Image } from "@tiptap/extension-image";
+import { StarterKit } from "@tiptap/starter-kit";
 import { TableKit } from "@tiptap/extension-table";
-import ImageResize from "tiptap-extension-resize-image";
+import { Color } from "@tiptap/extension-text-style";
+import { Highlight } from "@tiptap/extension-highlight";
+import { TextAlign } from "@tiptap/extension-text-align";
 import { useEditor, EditorContent } from "@tiptap/react";
+import { ImageResize } from "tiptap-extension-resize-image";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { LineHeightExtension } from "@/extensions/line-height";
+import { TextStyle, FontFamily, FontSize } from "@tiptap/extension-text-style";
 
 import { useEditorStore } from "@/store/use-editor-store";
 
@@ -44,10 +51,27 @@ export function Editor() {
       },
     },
     extensions: [
+      StarterKit,
+      LineHeightExtension,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      Link.configure({
+        autolink: true,
+        openOnClick: false,
+        defaultProtocol: "https",
+      }),
+      Color,
+      Highlight.configure({
+        multicolor: true,
+      }),
+      FontFamily,
+      FontSize,
+      TextStyle,
+      Image,
+      ImageResize,
       TaskList,
       TableKit,
-      StarterKit,
-      ImageResize,
       TaskItem.configure({ nested: true }),
     ],
     content: "<p>Hello World! 🌎️</p>",

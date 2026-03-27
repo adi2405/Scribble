@@ -172,14 +172,7 @@
 
   /* Image */
   img {
-    display: block;
-    height: auto;
-    margin: 1.5rem 0;
-    max-width: 100%;
-
-    &.ProseMirror-selectednode {
-      outline: 3px solid var(--primary);
-    }
+    @apply cursor-pointer;
   }
 
   /* Table-specific styling */
@@ -241,6 +234,16 @@
   &.resize-cursor {
     cursor: ew-resize;
     cursor: col-resize;
+  }
+
+  /* Link styles */
+  a {
+    @apply text-blue-600;
+    cursor: pointer;
+
+    &:hover {
+      @apply underline;
+    }
   }
 
   /* List styles */
