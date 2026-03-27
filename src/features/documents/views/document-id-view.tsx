@@ -1,11 +1,7 @@
-import { Editor } from "../components/editor"
+import { Editor } from "../components/editor";
 import { Toolbar } from "../components/toolbar";
 
-interface DocumentIdViewProps {
-  documentId: string;
-}
-
-export function DocumentIdView({ documentId }: DocumentIdViewProps) {
+export function DocumentIdView() {
   return (
     <div className="min-h-screen bg-[#FAFBFD]">
       <Toolbar />
