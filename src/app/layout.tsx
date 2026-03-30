@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Scribble",
   description: "Online collaborative file editor",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
