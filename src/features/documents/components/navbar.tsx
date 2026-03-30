@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { DocumentInput } from "./document-input";
+import { useEditorStore } from "@/store/use-editor-store";
 import {
   Menubar,
   MenubarContent,
@@ -40,6 +41,8 @@ const MAX_ROWS = 10;
 const MAX_COLS = 8;
 
 export function Navbar() {
+  const { editor } = useEditorStore();
+
   const [hoveredRows, setHoveredRows] = useState(0);
   const [hoveredCols, setHoveredCols] = useState(0);
 
@@ -54,9 +57,55 @@ export function Navbar() {
   }, [hoveredRows, hoveredCols]);
 
   const handleInsertTable = (rows: number, cols: number) => {
-    console.log("Insert table:", { rows, cols });
-    // call your editor command here
-    // editor.chain().focus().insertTable({ rows, cols, withHeaderRow: false }).run()
+    editor
+      ?.chain()
+      .focus()
+      .insertTable({ rows, cols, withHeaderRow: false })
+      .run();
+  };
+
+  const onDownload = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+  };
+
+  const onSaveJSON = () => {
+    if (!editor) {
+      return;
+    }
+
+    const content = editor.getJSON();
+    const blob = new Blob([JSON.stringify(content)], {
+      type: "application/json",
+    });
+    onDownload(blob, `document.json`); // TODO: User document name
+  };
+
+  const onSaveHTML = () => {
+    if (!editor) {
+      return;
+    }
+
+    const content = editor.getHTML();
+    const blob = new Blob([content], {
+      type: "text/html",
+    });
+    onDownload(blob, `document.html`); // TODO: User document name
+  };
+
+  const onSaveText = () => {
+    if (!editor) {
+      return;
+    }
+
+    const content = editor.getText();
+    const blob = new Blob([content], {
+      type: "text/plain",
+    });
+    onDownload(blob, `document.txt`); // TODO: User document name
   };
 
   return (
@@ -80,19 +129,19 @@ export function Navbar() {
                       Save
                     </MenubarSubTrigger>
                     <MenubarSubContent>
-                      <MenubarItem>
+                      <MenubarItem onClick={onSaveJSON}>
                         <FileJsonIcon />
                         JSON
                       </MenubarItem>
-                      <MenubarItem>
+                      <MenubarItem onClick={onSaveHTML}>
                         <GlobeIcon />
                         HTML
                       </MenubarItem>
-                      <MenubarItem>
+                      <MenubarItem onClick={() => window.print()}>
                         <BsFilePdf />
                         PDF
                       </MenubarItem>
-                      <MenubarItem>
+                      <MenubarItem onClick={onSaveText}>
                         <FileTextIcon />
                         Text
                       </MenubarItem>
@@ -124,12 +173,16 @@ export function Navbar() {
                   Edit
                 </MenubarTrigger>
                 <MenubarContent>
-                  <MenubarItem>
+                  <MenubarItem
+                    onClick={() => editor?.chain().focus().undo().run()}
+                  >
                     <Undo2Icon />
                     Undo
                     <MenubarShortcut>Ctrl+Z</MenubarShortcut>
                   </MenubarItem>
-                  <MenubarItem>
+                  <MenubarItem
+                    onClick={() => editor?.chain().focus().redo().run()}
+                  >
                     <Redo2Icon />
                     Redo
                     <MenubarShortcut>Ctrl+Y</MenubarShortcut>
@@ -188,26 +241,46 @@ export function Navbar() {
                       Text
                     </MenubarSubTrigger>
                     <MenubarSubContent>
-                      <MenubarItem>
+                      <MenubarItem
+                        onClick={() =>
+                          editor?.chain().focus().toggleBold().run()
+                        }
+                      >
                         <BoldIcon />
                         Bold<MenubarShortcut>Ctrl+B</MenubarShortcut>
                       </MenubarItem>
-                      <MenubarItem>
+                      <MenubarItem
+                        onClick={() =>
+                          editor?.chain().focus().toggleItalic().run()
+                        }
+                      >
                         <ItalicIcon />
                         Italic<MenubarShortcut>Ctrl+I</MenubarShortcut>
                       </MenubarItem>
-                      <MenubarItem>
+                      <MenubarItem
+                        onClick={() =>
+                          editor?.chain().focus().toggleUnderline().run()
+                        }
+                      >
                         <UnderlineIcon />
                         Underline<MenubarShortcut>Ctrl+U</MenubarShortcut>
                       </MenubarItem>
-                      <MenubarItem>
+                      <MenubarItem
+                        onClick={() =>
+                          editor?.chain().focus().toggleStrike().run()
+                        }
+                      >
                         <StrikethroughIcon />
                         Strikethrough
                         <MenubarShortcut>Ctrl+S</MenubarShortcut>
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
-                  <MenubarItem>
+                  <MenubarItem
+                    onClick={() =>
+                      editor?.chain().focus().unsetAllMarks().run()
+                    }
+                  >
                     <RemoveFormattingIcon />
                     Clear formatting
                   </MenubarItem>
