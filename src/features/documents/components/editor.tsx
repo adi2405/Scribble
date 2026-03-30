@@ -75,7 +75,6 @@ export function Editor() {
       TableKit,
       TaskItem.configure({ nested: true }),
     ],
-    content: "<p>Hello World! 🌎️</p>",
     immediatelyRender: false,
   });
 
