@@ -11,7 +11,7 @@ export function Navbar() {
         <Link href={"/"}>
           <Image src={"/logo.svg"} alt="Scribble" height={24} width={24} />
         </Link>
-        <h3 className="text-xl">Docs</h3>
+        <h3 className="text-xl">Scribble</h3>
       </div>
       <SearchInput />
       <UserButton />
