@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Inter, Geist_Mono } from "next/font/google";
 
@@ -36,7 +37,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <NuqsAdapter>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+          <ClerkProvider>
+            <ConvexClientProvider>{children}</ConvexClientProvider>
+          </ClerkProvider>
         </NuqsAdapter>
       </body>
     </html>
