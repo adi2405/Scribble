@@ -5,12 +5,13 @@ import { useQuery } from "convex/react";
 import { Navbar } from "../components/navbar";
 import { api } from "../../../../convex/_generated/api";
 import { TemplatesGallery } from "../components/templates-gallery";
+import { FullscreenLoader } from "@/components/custom/fullscreen-loader";
 
 export function HomeView() {
   const documents = useQuery(api.documents.get);
 
   if (documents === undefined) {
-    return <p>Loading...</p>;
+    return <FullscreenLoader label="Loading..." />;
   }
 
   return (
