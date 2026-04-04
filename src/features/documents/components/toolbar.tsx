@@ -895,6 +895,7 @@ export function Toolbar() {
       isItalic: editor?.isActive("italic") ?? false,
       isUnderline: editor?.isActive("underline") ?? false,
       isTaskList: editor?.isActive("taskList") ?? false,
+      isComment: editor?.isActive("liveblocksCommentMark") ?? false,
     }),
   });
 
@@ -956,8 +957,8 @@ export function Toolbar() {
       {
         label: "Comment",
         icon: MessagesSquareIcon,
-        onClick: () => console.log("Clicked comment"),
-        isActive: false, // TODO: Enable this functionality
+        onClick: () => editor?.chain().focus().addPendingComment().run(),
+        isActive: editorState?.isComment,
       },
       {
         label: "List Todo",
