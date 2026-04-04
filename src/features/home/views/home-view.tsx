@@ -1,6 +1,6 @@
 "use client";
 
-import { usePaginatedQuery } from "convex/react";
+import { useConvexAuth, usePaginatedQuery } from "convex/react";
 
 import { Navbar } from "../components/navbar";
 import { api } from "../../../../convex/_generated/api";
@@ -9,10 +9,12 @@ import { DocumentsTable } from "../components/documents-table";
 import { TemplatesGallery } from "../components/templates-gallery";
 
 export function HomeView() {
+  const { isAuthenticated } = useConvexAuth();
+
   const [search] = useSearchParam();
   const { results, status, loadMore } = usePaginatedQuery(
     api.documents.get,
-    { search },
+    isAuthenticated ? { search } : "skip",
     { initialNumItems: 5 },
   );
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState } from "react";
 import { useMutation } from "convex/react";
 
@@ -46,7 +47,12 @@ export function RemoveDialog({ documentId, children }: RemoveDialogProps) {
             onClick={(e) => {
               e.stopPropagation();
               setIsRemoving(true);
-              remove({ id: documentId }).finally(() => setIsRemoving(false));
+              remove({ id: documentId })
+                .then(() => toast.success("Document removed successfully"))
+                .catch(() =>
+                  toast.error("You do not have access to remove this document"),
+                )
+                .finally(() => setIsRemoving(false));
             }}
           >
             Delete
