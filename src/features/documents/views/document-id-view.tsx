@@ -1,3 +1,4 @@
+import { Room } from "../components/room";
 import { Editor } from "../components/editor";
 import { Navbar } from "../components/navbar";
 import { Toolbar } from "../components/toolbar";
@@ -10,7 +11,9 @@ export function DocumentIdView() {
         <Toolbar />
       </div>
       <div className="pt-[114px] print:pt-0">
-        <Editor />
+        <Room>
+          <Editor />
+        </Room>
       </div>
     </div>
   );

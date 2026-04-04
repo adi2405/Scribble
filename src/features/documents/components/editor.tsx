@@ -11,12 +11,15 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import { ImageResize } from "tiptap-extension-resize-image";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { LineHeightExtension } from "@/extensions/line-height";
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import { TextStyle, FontFamily, FontSize } from "@tiptap/extension-text-style";
 
 import { Ruler } from "./ruler";
+import { Threads } from "./threads";
 import { useEditorStore } from "@/store/use-editor-store";
 
 export function Editor() {
+  const liveblocks = useLiveblocksExtension();
   const { setEditor } = useEditorStore();
 
   const editor = useEditor({
@@ -52,7 +55,11 @@ export function Editor() {
       },
     },
     extensions: [
-      StarterKit,
+      liveblocks,
+      StarterKit.configure({
+        // The Liveblocks extension comes with its own history handling
+        undoRedo: false,
+      }),
       LineHeightExtension,
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -83,6 +90,7 @@ export function Editor() {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
+        <Threads editor={editor} />
       </div>
     </div>
   );
