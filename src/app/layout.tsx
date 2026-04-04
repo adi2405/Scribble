@@ -4,6 +4,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Inter, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 import { ConvexClientProvider } from "@/components/custom/convex-client-provider";
 
 const inter = Inter({
@@ -38,7 +39,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <NuqsAdapter>
           <ClerkProvider>
-            <ConvexClientProvider>{children}</ConvexClientProvider>
+            <ConvexClientProvider>
+              {children}
+              <Toaster />
+            </ConvexClientProvider>
           </ClerkProvider>
         </NuqsAdapter>
       </body>
