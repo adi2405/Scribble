@@ -11,12 +11,14 @@ const liveblocks = new Liveblocks({
 });
 
 export async function POST(request: Request) {
-  const { sessionClaims } = await auth();
-  if (!sessionClaims) {
+  const { orgId } = await auth();
+
+  if (!orgId) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const user = await currentUser();
+
   if (!user) {
     return new Response("Unauthorized", { status: 401 });
   }
@@ -28,11 +30,9 @@ export async function POST(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const organizationId = (sessionClaims.o as { id?: string } | undefined)?.id;
-
   const isOwner = document.ownerId === user.id;
   const isOrganizationMember = !!(
-    document.organizationId && document.organizationId === organizationId
+    document.organizationId && document.organizationId === orgId
   );
 
   if (!isOwner && !isOrganizationMember) {
@@ -41,7 +41,8 @@ export async function POST(request: Request) {
 
   const session = liveblocks.prepareSession(user.id, {
     userInfo: {
-      name: user.fullName ?? "Anonymous",
+      name:
+        user.fullName ?? user.primaryEmailAddress?.emailAddress ?? "Anonymous",
       avatar: user.imageUrl,
     },
   });

@@ -24,6 +24,7 @@ import {
   Undo2Icon,
 } from "lucide-react";
 
+import { Avatars } from "./avatars";
 import { DocumentInput } from "./document-input";
 import { useEditorStore } from "@/store/use-editor-store";
 import {
@@ -292,6 +293,7 @@ export function Navbar() {
         </div>
       </div>
       <div className="flex items-center gap-3 pl-6">
+        <Avatars />
         <OrganizationSwitcher
           afterCreateOrganizationUrl={"/"}
           afterLeaveOrganizationUrl={"/"}
