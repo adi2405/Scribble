@@ -24,6 +24,7 @@ import {
   Undo2Icon,
 } from "lucide-react";
 
+import { Inbox } from "./inbox";
 import { Avatars } from "./avatars";
 import { DocumentInput } from "./document-input";
 import { useEditorStore } from "@/store/use-editor-store";
@@ -294,6 +295,7 @@ export function Navbar() {
       </div>
       <div className="flex items-center gap-3 pl-6">
         <Avatars />
+        <Inbox />
         <OrganizationSwitcher
           afterCreateOrganizationUrl={"/"}
           afterLeaveOrganizationUrl={"/"}
