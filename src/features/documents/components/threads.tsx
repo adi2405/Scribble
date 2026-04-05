@@ -1,12 +1,12 @@
 import { Editor } from "@tiptap/react";
-import { useThreads } from "@liveblocks/react/suspense";
+import { useThreads, ClientSideSuspense } from "@liveblocks/react/suspense";
 import {
   AnchoredThreads,
   FloatingComposer,
   FloatingThreads,
 } from "@liveblocks/react-tiptap";
 
-export function Threads({ editor }: { editor: Editor | null }) {
+function ThreadsList({ editor }: { editor: Editor | null }) {
   const { threads } = useThreads({ query: { resolved: false } });
 
   return (
@@ -21,5 +21,13 @@ export function Threads({ editor }: { editor: Editor | null }) {
       />
       <FloatingComposer editor={editor} className="floating-composer" />
     </>
+  );
+}
+
+export function Threads({ editor }: { editor: Editor | null }) {
+  return (
+    <ClientSideSuspense fallback={null}>
+      <ThreadsList editor={editor} />
+    </ClientSideSuspense>
   );
 }
