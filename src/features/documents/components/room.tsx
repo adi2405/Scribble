@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   LiveblocksProvider,
   RoomProvider,
@@ -21,24 +21,28 @@ type User = {
 
 export function Room({ children }: { children: ReactNode }) {
   const params = useParams();
-
   const [users, setUsers] = useState<User[]>([]);
 
-  const fetchUsers = useMemo(
-    () => async () => {
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadUsers = async () => {
       try {
         const list = await getUsers();
-        setUsers(list);
-      } catch (error) {
+        if (!cancelled) {
+          setUsers(list);
+        }
+      } catch {
         toast.error("Failed to fetch users");
       }
-    },
-    [],
-  );
+    };
 
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    void loadUsers();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <LiveblocksProvider
@@ -79,7 +83,10 @@ export function Room({ children }: { children: ReactNode }) {
         }));
       }}
     >
-      <RoomProvider id={params.documentId as string}>
+      <RoomProvider
+        id={params.documentId as string}
+        initialStorage={{ leftMargin: 56, rightMargin: 56 }}
+      >
         <ClientSideSuspense
           fallback={<FullscreenLoader label="Loading document..." />}
         >
